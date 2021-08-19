@@ -12,14 +12,20 @@ services:
         "--progs=/etc/mtail",
         "--logs=/var/log/mtail-nginx/access.log",
         "--logs=/var/log/mtail-nginx/error.log",
-        "-logtostderr",
+        "--logtostderr",
       ]
   nginx:
-    image: nginx
+    image: nginx:1.21.1
     ports:
       - "80:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - logvolume01:/var/log/mtail-nginx
+  prometheus:
+    image: prom/prometheus:v2.29.1
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 volumes:
   logvolume01: {}
